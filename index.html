@@ -101,6 +101,34 @@
             height: 200x; /* Fixed height for frames */
             margin: 40px; /* Space around each frame */
         }
+        .interactive-section {
+            padding: 20px;
+            border: 2px solid #ccc;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        /* Full-screen overlay background */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+         /* Message Box Styling */
+        #message-box {
+            padding: 20px;
+            border-radius: 0px; /* Sharp edges */
+            background-color: #fff;
+            text-align: center;
+            cursor: pointer;
+            width: 250px;
+        }
+         
     </style>
 </head>
 <body>
@@ -117,8 +145,74 @@
     <section id="home">
         <h2>Home</h2>
         <p style="font-family: 'Verdana', sans-serif; color: gray;">Welcome to a webpage exclusively made for you. Consider this as a long lasting gift that I will always be updating for you.♥ </p>
-        <img src="bg1.jpg" alt="Description of Image" /> 
+        <p>Click anywhere on the page for a surpise. :)</p>
+        <hr>
+    
+        <img src="C:\Users\96655\Downloads\foryou\my-website\bg1.jpg" alt="Description of Image" /> 
+        
+        <div class="overlay" id="overlay">
+            <div id="message-box">
+                ♥♥♥
+            </div>
+        </div>
     </section>
+
+    <script>
+        // Array of random messages
+        const messages = [
+            "Happy 5th monthsary, hon!",
+            "Did you like my gift?",
+            "I still can't believe how fast the time flew. Parang kahapon lang 4th month natin tapos wow... next month, 6 months na tayo.",
+            "I hope that this gift will find you whenever you feel down.",
+            "I love love love you soooo much!",
+            "I know na I still have a long way to go to be a better girlfriend, so please continue being patient with me. Someday I'll get rid of my immaturity rin and give you the kind of love and relationship you really deserve.",
+            "No matter the situation is; no matter how far our distance is, always remember that I will choose you over and over again. I will always be your kakampi.",
+            "Thank you so much for everything. You don't have any idea how much you make me happy.",
+            "My Luis, my baby, my honey, always know that I will be by your side until the end.",
+    ];
+
+        // References to overlay and message box
+        const overlay = document.getElementById("overlay");
+        const messageBox = document.getElementById("message-box");
+
+        // Function to show the overlay
+        function showOverlay() {
+            overlay.style.display = "flex";
+            console.log("Overlay shown");
+        }
+
+        // Function to hide the overlay
+        function hideOverlay() {
+            console.log("Hiding overlay"); // Debug
+            overlay.style.display = "none";
+        }
+
+        // Show the overlay when anywhere on the page is clicked
+        document.addEventListener("click", function(event) {
+            console.log("Page clicked"); // Debug
+            if (overlay.style.display === "none") {
+                showOverlay();
+            }
+        });
+
+        // Event listener for message box click
+        messageBox.addEventListener("click", function(event) {
+            console.log("Message box clicked"); // Debug
+            if (messages.length > 0) {
+                // Get a random message and remove it from the array
+                const randomIndex = Math.floor(Math.random() * messages.length);
+                const randomMessage = messages.splice(randomIndex, 1)[0];
+                messageBox.textContent = randomMessage;
+            } else {
+                // Hide overlay when all messages are displayed
+                hideOverlay();
+            }
+            // Prevent the event from propagating to the document
+            event.stopPropagation();
+        });
+        // Add a click event listener to the document
+        document.addEventListener("click", showOverlay);
+    </script>
 
     <section id="messages">
     
@@ -331,14 +425,8 @@
             <iframe src="https://open.spotify.com/embed/track/6xlUGjSVu90hOMa8cxXCRh" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
             <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
             <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
-            
-            
+
+
         </div>
     </section> 
     
