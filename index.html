@@ -115,20 +115,71 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5); /* semi-transparent background */
-            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
+            z-index: 10;
+            display: none; /* Initially hidden */
         }
          /* Message Box Styling */
-        #message-box {
+        .message-box {
             padding: 20px;
             border-radius: 0px; /* Sharp edges */
-            background-color: #fff;
+            background-color: #ffffff;
             text-align: center;
             cursor: pointer;
             width: 250px;
         }
-         
+        /* Heart flow overlay within the section */
+    .heart-flow-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allows clicking through the hearts */
+    z-index: 1;
+}
+/* Heart styling */
+.floating-heart {
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    position: absolute;
+    transform: rotate(-45deg);
+    animation: float 4s linear forwards;
+    opacity: 1;
+}
+
+.floating-heart::before,
+.floating-heart::after {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.floating-heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.floating-heart::after {
+    left: 10px;
+    top: 0;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(200px - 50%), calc(-200px + 50%)) rotate(-45deg);
+        opacity: 0;
+    }
+}
     </style>
 </head>
 <body>
@@ -138,87 +189,110 @@
             <a onclick="showSection('home')">Home</a>
             <a onclick="showSection('messages')">Messages</a>
             <a onclick="showSection('foryou')">For You</a>
-            <a onclick="showSection('songs')">Thinking of You</a>
+            <a onclick="showSection('songs')">Playlist</a>
         </nav>
     </header>
 
+        <div class="overlay" id="heartOverlay">
+            <div class="message-box" id="messageBox">
+                <p id="messageContent">Click anywhere on the page for a surpise. :)</p>
+            </div>
+        </div>
+        
     <section id="home">
         <h2>Home</h2>
         <p style="font-family: 'Verdana', sans-serif; color: gray;">Welcome to a webpage exclusively made for you. Consider this as a long lasting gift that I will always be updating for you.♥ </p>
-        <p>Click anywhere on the page for a surpise. :)</p>
         <hr>
-    
-        <img src="bg1.jpg" alt="Description of Image" /> 
+        <p>Click anywhere on the page for a surprise.</p>
+        <img src="C:\Users\96655\Downloads\foryou\my-website\bg1.jpg" alt="Description of Image" /> 
         
-        <div class="overlay" id="overlay">
-            <div id="message-box">
-                ♥♥♥
-            </div>
-        </div>
+        <div class="heart-flow-overlay" id="heartFlowOverlay"></div>
     </section>
 
     <script>
-        // Array of random messages
-        const messages = [
-            "Happy 5th monthsary, hon!",
-            "Did you like my gift?",
-            "I still can't believe how fast the time flew. Parang kahapon lang 4th month natin tapos wow... next month, 6 months na tayo.",
-            "I hope that this gift will find you whenever you feel down.",
-            "I love love love you soooo much!",
-            "I know na I still have a long way to go to be a better girlfriend, so please continue being patient with me. Someday I'll get rid of my immaturity rin and give you the kind of love and relationship you really deserve.",
-            "No matter the situation is; no matter how far our distance is, always remember that I will choose you over and over again. I will always be your kakampi.",
-            "Thank you so much for everything. You don't have any idea how much you make me happy.",
-            "My Luis, my baby, my honey, always know that I will be by your side until the end.",
-    ];
+        // Define messages and current message index
+            let messages = [
+                "Happy 5th monthsary, hon!",
+                "Did you like my gift?",
+                "I still can't believe how fast the time flew. Parang kahapon lang 4th month natin tapos wow... next month, 6 months na tayo.",
+                "I hope that this gift will find you whenever you need it.",
+                "I love love love you soooo much!",
+                "I know na I still have a long way to go to be a better girlfriend, so please continue being patient with me. Someday I'll get rid of my immaturity rin and give you the kind of love and relationship you really deserve.",
+                "No matter the situation is; no matter how far our distance is, always remember that I will choose you over and over again. I will always be your kakampi.",
+                "Thank you so much for everything. You don't have any idea how much you make me happy.",
+                "My Luis, my baby, my honey, always know that I will be by your side until the end."];
+            let currentMessageIndex = 0;
+            
+            // Function to shuffle the messages array
+            function shuffleMessages(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
 
-        // References to overlay and message box
-        const overlay = document.getElementById("overlay");
-        const messageBox = document.getElementById("message-box");
-
-        // Function to show the overlay
-        function showOverlay() {
-            overlay.style.display = "flex";
-            console.log("Overlay shown");
+            // Shuffle the messages when the page loads
+            messages = shuffleMessages(messages);
+            // Select elements for overlay and message content
+            const messageOverlay = document.getElementById("heartOverlay");
+            const messageContent = document.getElementById("messageContent");
+            
+            // Initial click event to start showing messages
+            document.addEventListener("click", showNextMessage);
+            
+            function showNextMessage(event) {
+                // Stop propagation to avoid closing the overlay immediately
+                event.stopPropagation();
+                
+                // Check if there are more messages to show
+                if (currentMessageIndex < messages.length) {
+                    messageContent.textContent = messages[currentMessageIndex];
+                    messageOverlay.style.display = "flex"; // Show overlay
+                    currentMessageIndex++;
+                } else {
+                // Trigger the heart flow after the last message
+                messageContent.textContent = "All messages read! Hehe";
+                popUpHearts(); // Trigger heart flow
+                setTimeout(() => messageOverlay.style.display = "none", 1000); // Hide overlay
+                document.removeEventListener("click", showNextMessage); // Stop listening for clicks
+            }
         }
 
-        // Function to hide the overlay
-        function hideOverlay() {
-            console.log("Hiding overlay"); // Debug
-            overlay.style.display = "none";
+        // Function to create the floating heart effect
+        function popUpHearts() {
+            const heartFlowOverlay = document.getElementById("heartFlowOverlay");
+            heartFlowOverlay.innerHTML = ""; // Clear any existing hearts
+
+            const numHearts = 69; // Number of hearts to display
+            for (let i = 0; i < numHearts; i++) {
+                const heart = document.createElement("div");
+                heart.classList.add("floating-heart");
+
+            // Randomize position and animation settings
+            heart.style.top = Math.random() * 100 + "%";
+            heart.style.left = Math.random() * 100 + "%";
+            heart.style.bottom = Math.random() * 100 + "%";
+            heart.style.animationDuration = Math.random() * 2 + 2 + "s";
+            heart.style.animationDirection = Math.random() > 0.5 ? "normal" : "reverse";
+
+            // Append heart and remove it after animation ends
+            heartFlowOverlay.appendChild(heart);
+            heart.addEventListener("animationend", () => heart.remove());
+            }   
         }
-
-        // Show the overlay when anywhere on the page is clicked
-        document.addEventListener("click", function(event) {
-            console.log("Page clicked"); // Debug
-            if (overlay.style.display === "none") {
-                showOverlay();
-            }
-        });
-
-        // Event listener for message box click
-        messageBox.addEventListener("click", function(event) {
-            console.log("Message box clicked"); // Debug
-            if (messages.length > 0) {
-                // Get a random message and remove it from the array
-                const randomIndex = Math.floor(Math.random() * messages.length);
-                const randomMessage = messages.splice(randomIndex, 1)[0];
-                messageBox.textContent = randomMessage;
-            } else {
-                // Hide overlay when all messages are displayed
-                hideOverlay();
-            }
-            // Prevent the event from propagating to the document
-            event.stopPropagation();
-        });
-        // Add a click event listener to the document
-        document.addEventListener("click", showOverlay);
     </script>
-
+    
     <section id="messages">
     
         <h2>Messages</h2>
         <p style="font-family: 'Verdana', sans-serif; color: gray;">Wondering what this section is for and what makes it different from the For Your section? Well, by the name itself, this is a section where I'm putting random messages I wanted you to know -- like reasons why I love you.</p> 
         <hr>
+        <div class="heart-container">
+            <div class="heart" id="heart"></div>
+        </div>
+    
+
         <button class="toggle-button" onclick="toggleContent('content-1')">I love how gentle you are with me.</button>
         <div id="content-1" class="toggle-content">
             <h2>I love how gentle you are with me.</h2>
@@ -281,7 +355,6 @@
 
         <p><button class="toggle-button" onclick="toggleContent('content-11')"></button></p>
         <div id="content-11" class="toggle-content">
-            <
         </div>
 
         </section>
@@ -331,7 +404,7 @@
 
         <button class="button" onclick="toggleContentWithAlert('content3', 'I love you!')">He changed me...</button>
         <div id="content3" class="hidden-content">
-            <p style="color: rgb(9, 105, 9)">But at what cost?</p>
+            <p style="color: rgb(9, 105, 9)"><i>But at what cost?</i></p>
             <p>No one can love an angry complicated woman.</p>
             <p><i>But he did.</i></p>
             <p>No man likes a hyper independent woman.</p>
@@ -342,6 +415,11 @@
             <p>He understood that I was used to doing things alone and yet offered me his hand. He understood that I value my alone time and yet he offered me his presence. He knew that behind all this facade of independency is just <i>a girl who wants to be held;</i> <span style="background-color: rgb(142, 199, 155);">A girl who wants to be told that she did a great job on holding on during tough times. A girl who’s been through a lot. A girl whose anger is a symbol of loneliness.</span> He knew that it would be a complicated maze. He knew that risking might even hurt him but even so, he chose to hug the thorns. <i><b>He changed me at the cost of being better.</b></i></p>
             <p>I never knew I needed someone to open the door for me until he did. I never knew my thoughts matter until he validated my every emotion. I never knew that my anger could turn into a sweet ray of sunlight. I never knew that love could feel so magical. Day by day, I find myself <span style="background-color: rgb(142, 199, 155);">loving him more than I did yesterday.</span> Day by day, I find myself thinking of <span style="background-color: rgb(142, 199, 155);">how much more can I love this man for the next days.</span></p>
             <p><span style="background-color: rgb(142, 199, 155);">He made me want to change myself.</span> The self-sabotages and negative talks of <i>“he doesn’t deserve me”</i> turned into <i>“I want to keep his smile.”</i> I knew I wasn’t worthy of his love and so, I decided to be worthy of it because I know <i><b>no one can love me more than he did.</b></i> No one can embrace me in a hug warmer than his. No one can go through such lengths for me unless him, and <span style="background-color: rgb(142, 199, 155);">no one can be my darling if it’s not him.</span></p>
+        </div>
+
+        <button class="button" onclick="toggleContentWithAlert('content4', 'I love you!')">Why him?</button>
+        <div id="content4" class="hidden-content">
+            <p style="color: rgb(9, 105, 9)"><i>Why not?</i></p>
         </div>
 
     </section>
@@ -361,7 +439,7 @@
     </script>
 
     <section id="songs">
-        <h2>Thinking of You</h2>
+        <h2>Playlist</h2>
         <p style="font-family: 'Verdana', sans-serif; color: gray;">It's no doubt that I think about you a lot everyday, so I made this playlist for you. All these love for my sweet baby kasi ang sarap mo mahalin.</p>
         <hr>
         <div class="spotify-container">
@@ -431,12 +509,12 @@
             <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
             <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
             <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
+            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
+            <iframe src="" width="100%" height="200" frameBorder="0" allow="autoplay;"></iframe>
             
-
 
         </div>
     </section> 
-    
 
     <script>
     function showSection(sectionId) {
