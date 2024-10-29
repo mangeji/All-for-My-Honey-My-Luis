@@ -174,6 +174,16 @@
         transform: translate(calc(200px - 50%), calc(-200px + 50%)) rotate(-45deg);
         opacity: 0;
     }
+    /* Image Styling */
+.    img {
+    position: relative;
+    z-index: 2; /* Higher than overlay */
+    max-width: 100%; /* Responsive width */
+    margin: auto;
+    display: block;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%);
+}
 }
     </style>
 </head>
@@ -199,7 +209,7 @@
         <p style="font-family: 'Verdana', sans-serif; color: gray;">Welcome to a webpage exclusively made for you. Consider this as a long lasting gift that I will always be updating for you.♥ </p>
         <hr>
         <p>Click anywhere on the page for a surprise.</p>
-
+        <img src="C:\Users\96655\Downloads\foryou\my-website\bg1.jpg" alt="Me and Luis">
         
         <div class="heart-flow-overlay" id="heartFlowOverlay"></div>
     </section>
