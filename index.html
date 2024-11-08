@@ -175,16 +175,19 @@
         opacity: 0;
     }
      /* Make images responsive */
-    .image-section {
-    max-width: 100%; /* ensures the section is responsive */
-    height: auto; /* adjusts height based on the image's aspect ratio */
+   .image-section {
+    width: 100%; /* or set a fixed width like 300px */
+    height: auto; /* adjust based on your design */
+    border: 2px solid #000; /* optional: border around the section */
+    overflow: hidden; /* hides parts of the image that overflow */
 }
 
 .image-section img {
-    max-width: 100%; /* prevents the image from being larger than the section */
-    height: auto; /* maintains the aspect ratio */
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* ensures the image fills the section while maintaining its aspect ratio */
 }
-        
+
 }
     </style>
 </head>
