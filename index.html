@@ -174,26 +174,12 @@
         transform: translate(calc(200px - 50%), calc(-200px + 50%)) rotate(-45deg);
         opacity: 0;
     }
-     /* Make images responsive */
-  .image-section {
-    width: 100%; /* Adjust to fit your layout */
-    max-width: 500px; /* Prevents section from exceeding a fixed width */
-    height: 300px; /* Fixed height for the container */
-    border: 2px solid #000; /* Optional: border for visibility */
-    overflow: hidden; /* Hides overflowing parts of the image */
-    display: flex; /* Ensures proper alignment */
-    justify-content: center; /* Center image horizontally */
-    align-items: center; /* Center image vertically */
+     img {
+    width: 200px; /* Adjusts to the container's width */
+    height: auto; /* Maintains the aspect ratio */
 }
 
-.image-section img {
-    width: 100%; /* Scale the image width */
-    height: auto; /* Maintain the aspect ratio */
-    max-height: 100%; /* Prevent the image from exceeding the container's height */
-    object-fit: cover; /* Ensures the image covers the container */
-}
-
-
+ 
 }
     </style>
 </head>
@@ -214,7 +200,7 @@
             </div>
         </div>
         
-    <section id="home" class="image-section">
+    <section id="home">
         <h2>Home</h2>
         <p style="font-family: 'Verdana', sans-serif; color: gray;">Welcome to a webpage exclusively made for you. Consider this as a long lasting gift that I will always be updating for you.♥ </p>
         <hr>
