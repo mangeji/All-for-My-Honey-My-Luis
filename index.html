@@ -180,8 +180,16 @@
             height: auto;
             margin: auto;
             display: block;
-            object-fit: cover;
-            overflow: hidden;
+
+    .section-container {
+    width: 100%;  /* or specify a fixed width, like 300px */
+    height: 300px;  /* adjust based on your desired size */
+    border: 2px solid #000;  /* adds a border */
+    overflow: hidden;  /* hides any part of the image that overflows */
+    object-fit: cover;
+    padding: 10px;
+}
+
 }
     </style>
 </head>
